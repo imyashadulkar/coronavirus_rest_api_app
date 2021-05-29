@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:coronavirus_rest_api_app/app/services/api.dart';
+import 'package:coronavirus_rest_api_app/app/services/endpoint_data.dart';
 import 'package:http/http.dart' as http;
 
 class APIService {
@@ -24,9 +25,9 @@ class APIService {
     throw response;
   }
 
-  Future<int> getEndpointData({
+  Future<EndpointData> getEndpointData({
     required String accessToken,
-    required Endpoints endpoints,
+    required Endpoint endpoints,
   }) async {
     final uri = api.endpointUri(endpoints);
     final response = await http.get(
@@ -42,9 +43,11 @@ class APIService {
       if (data.isNotEmpty) {
         final Map<String, dynamic> endpointData = data[0];
         final String responseJsonKey = _responseJsonKeys[endpoints]!;
-        final int? result = endpointData[responseJsonKey];
-        if (result != null) {
-          return result;
+        final int? value = endpointData[responseJsonKey];
+        final String dateString = endpointData['date'];
+        final date = DateTime.tryParse(dateString);
+        if (value != null) {
+          return EndpointData(value: value, date: date);
         }
       }
     }
@@ -53,11 +56,11 @@ class APIService {
     throw response;
   }
 
-  static Map<Endpoints, String> _responseJsonKeys = {
-    Endpoints.cases: 'cases',
-    Endpoints.casesSuspected: 'data',
-    Endpoints.casesConfirmed: 'data',
-    Endpoints.deaths: 'data',
-    Endpoints.recovered: 'data'
+  static Map<Endpoint, String> _responseJsonKeys = {
+    Endpoint.cases: 'cases',
+    Endpoint.casesSuspected: 'data',
+    Endpoint.casesConfirmed: 'data',
+    Endpoint.deaths: 'data',
+    Endpoint.recovered: 'data'
   };
 }
