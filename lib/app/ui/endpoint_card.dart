@@ -1,5 +1,6 @@
 import 'package:coronavirus_rest_api_app/app/services/api.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 class EndpointCardData {
   final String title;
@@ -10,7 +11,7 @@ class EndpointCardData {
 }
 
 class EndpointCard extends StatelessWidget {
-  final Endpoints? endpoints;
+  final Endpoint? endpoints;
   final int? value;
 
   const EndpointCard({
@@ -19,18 +20,25 @@ class EndpointCard extends StatelessWidget {
     this.value,
   }) : super(key: key);
 
-  static Map<Endpoints, EndpointCardData> _cardTitles = {
-    Endpoints.cases:
+  static Map<Endpoint, EndpointCardData> _cardTitles = {
+    Endpoint.cases:
         EndpointCardData("Cases", "assets/count.png", Color(0xffFFF492)),
-    Endpoints.casesSuspected: EndpointCardData(
+    Endpoint.casesSuspected: EndpointCardData(
         "Suspected cases", "assets/suspect.png", Color(0xffEEDA28)),
-    Endpoints.casesConfirmed: EndpointCardData(
+    Endpoint.casesConfirmed: EndpointCardData(
         "Confirmed cases", "assets/fever.png", Color(0xffE99600)),
-    Endpoints.deaths:
+    Endpoint.deaths:
         EndpointCardData("Deaths", "assets/death.png", Color(0xffE40000)),
-    Endpoints.recovered:
+    Endpoint.recovered:
         EndpointCardData("Recovered", "assets/patient.png", Color(0xff70A901))
   };
+
+  String get formattedValue {
+    if (value == null) {
+      return '';
+    }
+    return NumberFormat('#,###,###,###').format(value);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -65,7 +73,8 @@ class EndpointCard extends StatelessWidget {
                       color: cardData.color,
                     ),
                     Text(
-                      value != null ? value.toString() : '',
+                      formattedValue,
+                      // value != null ? value.toString() : '',
                       style: Theme.of(context)
                           .textTheme
                           .headline5!
