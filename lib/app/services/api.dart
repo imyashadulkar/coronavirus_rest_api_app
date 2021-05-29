@@ -1,6 +1,6 @@
 import 'package:coronavirus_rest_api_app/app/services/app_keys.dart';
 
-enum Endpoints {
+enum Endpoint {
   cases,
   casesSuspected,
   casesConfirmed,
@@ -22,18 +22,18 @@ class API {
         path: 'token',
       );
 
-  Uri endpointUri(Endpoints endpoints) => Uri(
+  Uri endpointUri(Endpoint endpoints) => Uri(
         scheme: 'https',
         host: host,
         path: _paths[endpoints],
       );
 
-  static Map<Endpoints, String> _paths = {
-    Endpoints.cases: 'cases',
-    Endpoints.casesSuspected: 'casesSuspected',
-    Endpoints.casesConfirmed: 'casesConfirmed',
-    Endpoints.deaths: 'deaths',
-    Endpoints.recovered: 'recovered'
+  static Map<Endpoint, String> _paths = {
+    Endpoint.cases: 'cases',
+    Endpoint.casesSuspected: 'casesSuspected',
+    Endpoint.casesConfirmed: 'casesConfirmed',
+    Endpoint.deaths: 'deaths',
+    Endpoint.recovered: 'recovered'
   };
 
  
